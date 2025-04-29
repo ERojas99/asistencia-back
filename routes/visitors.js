@@ -41,18 +41,25 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
     
-    // Crear registro en Firestore
-    const visitorRef = await db.collection('visitors').add({
+    // Crear objeto de datos para Firestore, omitiendo campos undefined
+    const visitorData = {
       firstName,
       lastName,
       email,
-      countryCode,
-      phoneNumber,
-      company,
+      countryCode: countryCode || '+57',
+      phoneNumber: phoneNumber || '',
+      company: company || '',
       faceData,
-      faceImage,
       registrationDate: admin.firestore.FieldValue.serverTimestamp()
-    });
+    };
+    
+    // Solo añadir faceImage si existe
+    if (faceImage) {
+      visitorData.faceImage = faceImage;
+    }
+    
+    // Crear registro en Firestore
+    const visitorRef = await db.collection('visitors').add(visitorData);
     
     res.status(201).json({
       id: visitorRef.id,
