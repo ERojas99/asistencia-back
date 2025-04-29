@@ -6,6 +6,10 @@ admin.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE_URL
 });
 
+// Configurar Firestore para ignorar propiedades undefined
 const db = admin.firestore();
+db.settings({
+  ignoreUndefinedProperties: true
+});
 
 module.exports = { admin, db };
