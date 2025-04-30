@@ -41,7 +41,15 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
     
-    // Crear objeto de datos para Firestore, omitiendo campos undefined
+    // Verificar si faceData incluye verificación de vida
+    const hasLivenessVerification = faceData && 
+                                   faceData.livenessVerified && 
+                                   faceData.embeddings && 
+                                   faceData.embeddings.frontal &&
+                                   faceData.embeddings.right &&
+                                   faceData.embeddings.left;
+    
+    // Crear objeto de datos para Firestore
     const visitorData = {
       firstName,
       lastName,
@@ -49,13 +57,30 @@ router.post('/', async (req, res) => {
       countryCode: countryCode || '+57',
       phoneNumber: phoneNumber || '',
       company: company || '',
-      faceData,
-      registrationDate: admin.firestore.FieldValue.serverTimestamp()
+      registrationDate: admin.firestore.FieldValue.serverTimestamp(),
+      livenessVerified: hasLivenessVerification
     };
     
-    // Solo añadir faceImage si existe
-    if (faceImage) {
-      visitorData.faceImage = faceImage;
+    // Añadir datos faciales según el formato recibido
+    if (hasLivenessVerification) {
+      visitorData.faceData = {
+        frontal: faceData.embeddings.frontal,
+        right: faceData.embeddings.right,
+        left: faceData.embeddings.left
+      };
+      
+      // Añadir imágenes si existen
+      if (faceData.images && faceData.images.frontal) {
+        visitorData.faceImage = faceData.images.frontal;
+      }
+    } else if (faceData) {
+      // Formato antiguo (solo un embedding)
+      visitorData.faceData = faceData;
+      
+      // Añadir imagen si existe
+      if (faceImage) {
+        visitorData.faceImage = faceImage;
+      }
     }
     
     // Crear registro en Firestore
@@ -63,7 +88,8 @@ router.post('/', async (req, res) => {
     
     res.status(201).json({
       id: visitorRef.id,
-      message: 'Visitante registrado exitosamente'
+      message: 'Visitante registrado exitosamente',
+      livenessVerified: hasLivenessVerification
     });
   } catch (error) {
     console.error('Error al registrar visitante:', error);
