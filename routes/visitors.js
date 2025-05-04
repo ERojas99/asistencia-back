@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import { db, admin } from '../config/firebase-config.js';
+
 const router = express.Router();
-const { db, admin } = require('../config/firebase-config');
 
 // Obtener todos los visitantes
 router.get('/', async (req, res) => {
@@ -90,4 +91,4 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
