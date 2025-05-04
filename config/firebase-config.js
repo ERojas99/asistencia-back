@@ -1,4 +1,7 @@
-const admin = require('firebase-admin');
+import admin from 'firebase-admin';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 const serviceAccount = require('./serviceAccountKey.json');
 
 admin.initializeApp({
@@ -12,4 +15,5 @@ db.settings({
   ignoreUndefinedProperties: true
 });
 
+export { admin, db };
 module.exports = { admin, db };
