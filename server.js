@@ -1,7 +1,7 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const visitorsRoutes = require('./routes/visitors');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import visitorsRoutes from './routes/visitors.js'; // Asegúrate de que la extensión .js esté presente si es un módulo ES
 
 // Cargar variables de entorno
 dotenv.config();
@@ -26,3 +26,6 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
+
+// Exportar la instancia de app como una exportación nombrada
+export { app }; // Cambia 'export default app;' por esto
