@@ -23,6 +23,24 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Verificar si un correo electrónico ya existe
+router.get('/check-email/:email', async (req, res) => {
+  try {
+    const email = req.params.email.toLowerCase();
+    const visitorsSnapshot = await db.collection('visitors')
+      .where('email', '==', email)
+      .limit(1)
+      .get();
+    
+    res.status(200).json({
+      exists: !visitorsSnapshot.empty
+    });
+  } catch (error) {
+    console.error('Error al verificar correo electrónico:', error);
+    res.status(500).json({ error: 'Error al verificar el correo electrónico' });
+  }
+});
+
 // Registrar un nuevo visitante
 router.post('/', async (req, res) => {
   try {
