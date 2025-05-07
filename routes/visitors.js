@@ -29,6 +29,7 @@ router.post('/', async (req, res) => {
     const {
       firstName,
       lastName,
+      idNumber, // Nuevo campo para cédula
       email,
       countryCode,
       phoneNumber,
@@ -38,14 +39,20 @@ router.post('/', async (req, res) => {
     } = req.body;
     
     // Validar datos obligatorios
-    if (!firstName || !lastName || !email || !faceData) {
+    if (!firstName || !lastName || !idNumber || !email || !faceData) {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
+    }
+    
+    // Validar formato de cédula (solo números entre 6 y 10 dígitos)
+    if (!/^\d{6,10}$/.test(idNumber)) {
+      return res.status(400).json({ error: 'Formato de cédula inválido' });
     }
     
     // Crear objeto de datos para Firestore, omitiendo campos undefined
     const visitorData = {
       firstName,
       lastName,
+      idNumber, // Guardar el número de cédula
       email,
       countryCode: countryCode || '+57',
       phoneNumber: phoneNumber || '',
