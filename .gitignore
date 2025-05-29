@@ -28,6 +28,8 @@ var/
 .env.development.local
 .env.test.local
 .env.production.local
+back/
+
 
 # Archivos de configuración sensibles
 /app/config/serviceAccountKey.json
