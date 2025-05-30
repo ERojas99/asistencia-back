@@ -1,9 +1,26 @@
 # Dependencias
-/node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-package-lock.json
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
 
 # Entorno
 .env
@@ -11,29 +28,21 @@ package-lock.json
 .env.development.local
 .env.test.local
 .env.production.local
+back/
+
 
 # Archivos de configuración sensibles
-/config/serviceAccountKey.json
+/app/config/serviceAccountKey.json
 
 # Logs
 logs
 *.log
 
 # Directorios de caché
-.npm
-.eslintcache
+.pytest_cache/
+.coverage
+htmlcov/
 
 # Directorios de sistema
 .DS_Store
 Thumbs.db
-
-# Directorios de cobertura de pruebas
-/coverage
-
-# Directorios de construcción
-/build
-/dist
-
-# Archivos temporales
-*.tmp
-*.temp
